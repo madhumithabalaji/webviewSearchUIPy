@@ -1,0 +1,57 @@
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+    <style>
+    button {
+            font-size: 100%;
+            padding: 0.5rem;
+            margin: 0.3rem;
+            text-transform: uppercase;
+        }
+    
+    #searchlist-container{
+            margin: 1rem 3rem;
+            font-size: 100%;
+        }
+    
+    tfoot input {
+            width: 100%;
+            padding: 3px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <h2>Search Page</h2>
+    <button onClick="search()">Search Inventory</button>
+    <button onClick="goBack()">Home</button>
+    <div id="searchlist-container"></div>
+    <table id="search" class="display" width="100%"></table>
+    <script>
+    function goBack() {
+        pywebview.api.goBack()
+    }
+    
+    function search() {
+        pywebview.api.getAllCars().then(showSearchRecs)
+    }
+    
+    function showSearchRecs(response) {
+        $('#search').DataTable({
+            data: response,
+            columns: [
+                { title: "Price" },
+                { title: "Status" },
+                { title: "Year" },
+                { title: "Maker" },
+                { title: "Color" },
+                { title: "Model" },
+                { title: "Mileage" }
+            ]
+        } );
+    }
+    </script>
+</body>
+</html>

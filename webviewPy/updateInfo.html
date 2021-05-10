@@ -1,0 +1,88 @@
+<html>
+<head>
+    <style>
+    #carinfo-container, #update-container, #update-msg {
+            display: none;
+            margin: 1rem 3rem;
+            font-size: 100%;
+        }
+    
+    button {
+            font-size: 100%;
+            padding: 0.5rem;
+            margin: 0.3rem;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <h2>Car Update Page</h2>
+    <input type=text id="carid" placeholder="Enter car id">
+    <button onClick="getCarRecord()">Get Car Info</button>
+    <button onClick="goBack()">Home</button>
+    <button onClick="logout()">Log Out</button>
+    <div id="carinfo-container"></div>
+    <div id="update-container">
+        <input type=number id="price" placeholder="Update Price">
+        <input type=text id="status" placeholder="Update Status">
+        <input type=number id="year" placeholder="Update Year">
+        <input type=text id="maker" placeholder="Update Maker"><br/>
+        <input type=text id="color" placeholder="Update Color">
+        <input type=text id="model" placeholder="Update Model">
+        <input type=number id="mileage" placeholder="Update Mileage"><br/><br/>
+        <button onClick="updateCarRecord()">Update</button>
+    </div>
+    <div id="update-msg"></div>
+    <script>
+    function getCarRecord(){
+        var carid=document.getElementById("carid")
+        pywebview.api.getCarRecord(carid.value).then(showCarInfo)
+    }
+    
+    function showCarInfo(response){
+        var container = document.getElementById('carinfo-container')
+        container.innerText =  "Car Info: " + response
+        container.style.display = 'block'
+        document.getElementById('update-msg').style.display = 'none'
+        var container1 = document.getElementById('update-container')
+        if(response.indexOf(',') !== -1)
+        {
+            container1.style.display = 'block'
+        }
+        else
+        {
+            container1.style.display = 'none'
+        }
+    }
+    
+    function updateCarRecord(){
+        var carInfo= document.getElementById("carinfo-container")
+        var inputEl = ["price", "status", "year", "maker", "color", "model", "mileage"];
+        inputEl.forEach(updateQuery)
+    }
+    
+    function updateQuery(item, index){
+        var inpulElVal = document.getElementById(item).value
+        var carId = ((document.getElementById("carinfo-container").innerHTML).split(": ")[1]).split(",")[0]
+        if(inpulElVal)    
+            {
+                pywebview.api.updateCarField(carId,item,inpulElVal).then(showUpdateMsg)
+            }
+    }
+    
+    function showUpdateMsg(response){
+        var container= document.getElementById('update-msg')
+        container.innerHTML = response
+        container.style.display = 'block'
+    }
+    
+    function logout(){
+        pywebview.api.logout().then(goBack)
+    }
+    
+    function goBack() {
+        pywebview.api.goBack()
+    }
+    </script>
+</body>
+</html>

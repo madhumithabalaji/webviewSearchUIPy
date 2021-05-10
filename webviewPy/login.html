@@ -1,0 +1,57 @@
+<html>
+<head>
+    <style>    
+        label {
+            margin-left: 0.3rem;
+            margin-right: 0.3rem;
+        }
+    
+        button {
+            font-size: 100%;
+            padding: 0.5rem;
+            margin: 0.3rem;
+            text-transform: uppercase;
+        }
+        
+        #login-no {
+            display: none;
+            padding: 3rem;
+            color: red;
+            margin: 3rem 5rem;
+            font-size: 120%;
+        }
+    
+    </style>
+</head>
+<body>
+    <h2>Login Page</h2>
+    <div id="login">
+        <label>Username:</label>
+        <input type="text" id="username"><br/><br/>
+        <label>Password:</label>
+        <input type="password" id="pwd"><br/>
+        <button onClick="login()">Login</button>
+        <button onClick="goBack()">Home</button>
+    </div>
+    <span id="login-no">Invalid Credentials! Please Try Again!</span>
+    <script>
+    function goBack() {
+        pywebview.api.goBack()
+    }
+    
+    function login(){
+        var username= document.getElementById("username");
+        var pwd= document.getElementById("pwd");
+        var resp= pywebview.api.login(username.value, pwd.value).then(showResponse)
+    }
+    
+    function showResponse(response){
+        if (response === "no")
+        {
+            var container= document.getElementById('login-no')
+            container.style.display = 'block'
+        }
+    }
+    </script>
+</body>
+</html>
